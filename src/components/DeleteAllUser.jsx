@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const DeleteAllUser = () => {
+const DeleteAllUser = ({ deleteAllUser, text }) => {
   const Wrapper = styled.div`
     button {
       border: none;
@@ -17,7 +17,9 @@ const DeleteAllUser = () => {
 
   return (
     <Wrapper>
-      <motion.button whileTap={{ scale: 1.1 }}>delete user</motion.button>
+      <motion.button onClick={deleteAllUser} whileTap={{ scale: 1.1 }}>
+        {text}
+      </motion.button>
     </Wrapper>
   );
 };

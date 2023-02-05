@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./home.css";
 import DeleteAllUser from "../../components/DeleteAllUser";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import axios from "axios";
+// import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addUser,
+  deleteUsers,
+  removeUser,
+} from "../../store/userslice/userSlice";
+import { fakeApiData } from "../../api";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.user);
+
   const Wrapper = styled.section`
     text-align: center;
     width: 50%;
@@ -105,23 +115,45 @@ const Home = () => {
   //     promisefunction();
   //   }, []);
 
+  const addNewUserHandler = (name) => {
+    dispatch(addUser(name));
+  };
+
+  const removeSingleUserHandler = (id) => {
+    dispatch(removeUser(id));
+  };
+
+  const deleteAllUser = () => {
+    dispatch(deleteUsers());
+  };
+
+  console.log(users);
+
   return (
     <Wrapper>
       <section className="content">
         <div className="admin-table">
           <div className="admin-subtitle">List of Users Details</div>
-          <motion.button whileTap={{ scale: 1.1 }}>Add new Users</motion.button>
+          <motion.button
+            whileTap={{ scale: 1.1 }}
+            onClick={() => addNewUserHandler(fakeApiData())}
+          >
+            Add new Users
+          </motion.button>
         </div>
         <ul>
-          <li>
-            <span>h1</span>
-            <motion.i
-              whileTap={{ scale: 1.1 }}
-              className="bx bx-cut"
-            ></motion.i>
-          </li>
+          {users.map((item, index) => (
+            <li key={index}>
+              <span>{item}</span>
+              <motion.i
+                whileTap={{ scale: 1.1 }}
+                className="bx bx-cut"
+                onClick={() => removeSingleUserHandler(index)}
+              ></motion.i>
+            </li>
+          ))}
         </ul>
-        <DeleteAllUser />
+        <DeleteAllUser deleteAllUser={deleteAllUser} text={"Delete User"} />
       </section>
     </Wrapper>
   );
